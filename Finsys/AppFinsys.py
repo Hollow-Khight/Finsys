@@ -3,7 +3,13 @@ from flask import Flask
 AppFinsys = Flask (__name__)
 
 @AppFinsys.route('/')
-def raiz():
-    return 'Olá, turma!'
+@AppFinsys.route('/ola')
 
-AppFinsys.run()
+def raiz():
+    return 'Olá, Meu nome é Jeshua Daniel'
+
+def saudacao (nome):
+    return f'Olá, {nome}!'
+
+if __name__ == "__main__" :
+    AppFinsys.run(port = 8000)
