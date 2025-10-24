@@ -1,17 +1,14 @@
-from flask import Flask
+from flask import Flask, render_template
 
-AppFinsys = Flask (__name__)
+AppFinsys = Flask (__name__, template_folder='templates')
 
-@AppFinsys.route('/')
-@AppFinsys.route('/index')
+@AppFinsys.route("/")
+def home():
+    return render_template ('home.html')
 
-def indice():
-    return 'Olá, Meu nome é Jeshua Daniel'
-
-@AppFinsys.route('/rota1')
-def rota1():
-    resposta = "<H3> Esta é uma rota criada e separada do index </H3>"
-    return resposta
+@AppFinsys.route("/contato")
+def contato():
+    return render_template ('contato.html')
 
 def saudacao (nome):
     return f'Olá, {nome}!'
