@@ -1,115 +1,105 @@
-# 💰 Finsys
+# 🧾 Projeto Flask - Sistema de Cadastro e Login com Validação de Usuários
 
-Um aplicativo simples desenvolvido em **Python** com o **Flask**, que exibe diferentes páginas HTML e demonstra rotas básicas, renderização de templates e passagem de dados entre backend e frontend.
+Este projeto foi desenvolvido utilizando **Flask**, um microframework Python para criação de aplicações web.  
+O objetivo de hoje foi implementar **validação de usuários**, com **telas de cadastro, login e perfil**, utilizando um **arquivo JSON** para armazenamento dos dados.
 
 ---
 
-## 📂 Estrutura do Projeto
+## 🚀 Funcionalidades Principais
+
+✅ Cadastro de novos usuários  
+✅ Validação de e-mail duplicado  
+✅ Login com verificação de e-mail e senha  
+✅ Armazenamento seguro da sessão do usuário  
+✅ Exibição dos dados do usuário logado  
+✅ Bloqueio de acesso a páginas sem login  
+✅ Logout do usuário
+
+---
+
+## 🧠 Estrutura do Projeto
 
 ```
-Finsys/
+📁 seu_projeto/
 │
-├── Finsys/
-│   ├── __pycache__/
-│   ├── Include/
-│   ├── Lib/
-│   ├── Scripts/
-│   ├── templates/
-│   │   ├── contato.html
-│   │   ├── home.html
-│   │   ├── index.html
-│   │   └── usuario.html
-│   ├── AppFinsys.py
-│   ├── AppImport.py
-│   └── pyvenv.cfg
+├── templates/              # Páginas HTML do sistema
+│   ├── apresentacao.html
+│   ├──base.html
+│   ├── cadastro.html
+│   ├── contato.html
+│   ├── index.html
+│   ├── login.html
+│   └── usuario.html
 │
-└── .gitignore
+├── AppFinsys.py                  # Código principal do Flask (arquivo que você executa)
+│
+└── README.md               # Este arquivo
 ```
 
 ---
 
-## 🚀 Executando o Projeto
+## ⚙️ Tecnologias Utilizadas
 
-### 1️⃣ Ative o ambiente virtual (caso tenha sido criado)
-
-No Windows (PowerShell):
-```bash
-.\Scriptsctivate
-```
-
-No Linux/Mac:
-```bash
-source Scripts/activate
-```
-
-### 2️⃣ Instale as dependências
-
-```bash
-pip install flask
-```
-
-### 3️⃣ Execute o aplicativo
-
-```bash
-python AppFinsys.py
-```
-
-O servidor será iniciado na porta **8000**:
-```
-http://127.0.0.1:8000/
-```
+- **Python 3**
+- **Flask**
+- **HTML5**
+- **JSON**
+- (Opcional) **CSS / Bootstrap** para estilização
 
 ---
 
-## 🌐 Rotas Disponíveis
+## 🧩 Como Executar o Projeto
 
-| Rota | Função | Template Renderizado |
-|------|---------|----------------------|
-| `/` | Página inicial | `home.html` |
-| `/index` | Página de índice | `index.html` |
-| `/usuario` | Exibe dados do usuário | `usuario.html` |
-| `/contato` | Página de contato | `contato.html` |
+1. **Clone o repositório**
+   ```bash
+   git clone https://github.com/Hollow-Khight/Finsys.git
+   cd Finsys
+   ```
 
----
+2. **Crie um ambiente virtual**
+   ```bash
+   python -m venv Finsys
 
-## 🧠 Lógica Principal
+3. **Ative o ambiente**
+   ```bash
+   source venv/bin/activate     # Linux/Mac
+   Finsys\Scripts\activate      # Windows
+   ```
 
-No arquivo `AppFinsys.py`, o aplicativo Flask é criado com:
-```python
-AppFinsys = Flask(__name__, template_folder='templates')
-```
+4. **Instale as dependências**
+   ```bash
+   pip install flask
+   ```
 
-E as páginas são renderizadas com `render_template()`.
+5. **Execute o servidor Flask**
+   ```bash
+   python AppFinsys.py
+   ```
 
-Exemplo da rota `/usuario`:
-```python
-@AppFinsys.route("/usuario")
-def dados_usuario():
-    dados_usu = {"nome": "Jeshua", "profissao": "Desenvolvedor", "aplicativo": "Finsys"}
-    return render_template("usuario.html", dados=dados_usu)
-```
-
-Essa rota envia um dicionário `dados_usu` para o template `usuario.html`.
-
----
-
-## ✨ Função Extra
-
-O projeto também possui uma função simples de saudação:
-```python
-def saudacao(nome):
-    return f'Olá, {nome}!'
-```
+6. **Acesse no navegador:**
+   ```
+   http://127.0.0.1:8000
+   ```
 
 ---
 
-## 🧾 Licença
+## 🔒 Segurança e Sessões
 
-Este projeto foi desenvolvido para fins educacionais e aprendizado do framework **Flask**.
+- O sistema utiliza uma **chave secreta (SECRET_KEY)** para proteger as sessões.  
+- As rotas protegidas exigem que o usuário esteja logado. 
+- O arquivo `users.json` é criado automaticamente quando é cadastrada uma pessoa.
+- O login é validado com base no arquivo `users.json`, que guarda os dados cadastrados.
 
 ---
 
-## 👨‍💻 Autor
+## 👤 Autor
 
 **Jeshua Daniel**  
-Desenvolvedor do projeto **Finsys** 🧩
+Projeto criado para estudo e prática com Flask.  
+Dia 26/10/2025: Implementação de cadastro, login, validação e controle de sessão de usuários.
+
+---
+
+## 📄 Licença
+
+Este projeto é de uso livre para fins educacionais e acadêmicos.

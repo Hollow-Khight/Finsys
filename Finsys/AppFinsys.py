@@ -1,23 +1,136 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for, session, g
+import json, os
 
-AppFinsys = Flask (__name__, template_folder='templates')
+JSON_FILE = 'users.json'
+SECRET_KEY = os.environ.get('SECRET_KEY') or 'sua_chave_secreta_e_unica'
 
-@AppFinsys.route("/")
-@AppFinsys.route("/index")
-def inicio():
-    return render_template ('index.html')
+AppFinsys = Flask(__name__, template_folder='templates')
+AppFinsys.secret_key = SECRET_KEY
 
-@AppFinsys.route("/perfil")
+def carregar_usuarios():
+    if not os.path.exists(JSON_FILE):
+        return []
+    try:
+        with open(JSON_FILE, 'r') as f:
+            content = f.read()
+            return json.loads(content) if content else []
+    except (json.JSONDecodeError, IOError):
+        return []
+
+def salvar_usuarios(users_list):
+    """Salva a lista de usuários no arquivo JSON."""
+    try:
+        with open(JSON_FILE, 'w') as f:
+            json.dump(users_list, f, indent=4)
+        return True
+    except IOError:
+        return False
+
+@AppFinsys.antes_request
+def antes_request():
+    g.user = None
+    if 'user_email' in session:
+        users = carregar_usuarios()
+        # Armazena o objeto do usuário em 'g.user' para fácil acesso
+        g.user = next((user for user in users if user['email'] == session['user_email']), None)
+        # Se o email na sessão não for mais válido, limpa a sessão
+        if g.user is None:
+            session.pop('user_email', None)
+
+@AppFinsys.route('/')
+def apresentacao():
+    if 'user_email' in session:
+        return redirect(url_for('index'))
+    else:
+        return render_template('apresentacao.html')
+
+@AppFinsys.route('/index')
+def index():
+    if 'user_email' not in session:
+        return redirect(url_for('apresentacao'))
+    
+    return render_template('index.html')
+
+
+@AppFinsys.route('/login', methods=['GET', 'POST'])
+def login():
+    if 'user_email' in session:
+        return redirect(url_for('index'))
+        
+    if request.method == 'POST':
+        email = request.form.get('email')
+        senha = request.form.get('senha')
+        
+        users = carregar_usuarios()
+        user_data = next((user for user in users if user['email'] == email and user['senha'] == senha), None)
+        
+        if user_data:
+            session['user_email'] = user_data['email']
+            return redirect(url_for('index')) 
+        else:
+            return render_template('login.html', erro_login="Email ou senha inválidos.")
+
+    return render_template('login.html')
+
+@AppFinsys.route('/cadastro', methods=['GET', 'POST'])
+def cadastro():
+    if 'user_email' in session:
+        return redirect(url_for('index'))
+
+    if request.method == 'POST':
+        nome_completo = request.form.get('nome_completo')
+        cpf = request.form.get('cpf')
+        email = request.form.get('email')
+        telefone = request.form.get('telefone')
+        endereco = request.form.get('endereco')
+        senha = request.form.get('senha')
+        confirma_senha = request.form.get('confirma_senha')
+
+        if senha != confirma_senha:
+            return render_template('cadastro.html', erro_cadastro="As senhas não coincidem.")
+            
+        users = carregar_usuarios()
+        if any(user.get('email') == email for user in users):
+            return render_template('cadastro.html', erro_cadastro="Este e-mail já está cadastrado.")
+
+        novo_usuario = {
+            'nome_completo': nome_completo,
+            'cpf': cpf,
+            'email': email,
+            'telefone': telefone,
+            'endereco': endereco,
+            'senha': senha,
+        }
+
+        users.append(novo_usuario)
+        if salvar_usuarios(users):
+            return redirect(url_for('login')) 
+        else:
+            return render_template('cadastro.html', erro_cadastro="Erro ao salvar o usuário.")
+
+    return render_template('cadastro.html')
+
+@AppFinsys.route('/perfil')
 def dados_usuario():
-    dados_usu = {"nome": "Jeshua", "profissao": "Desenvolvedor", "aplicativo":"Finsys"}
-    return render_template ("usuario.html", dados = dados_usu)
+    if 'user_email' not in session:
+        return redirect(url_for('apresentacao')) 
 
-@AppFinsys.route("/contato")
+    return render_template('usuario.html', user=g.user)
+
+@AppFinsys.route('/contato')
 def contato():
-    return render_template ('contato.html')
+    if 'user_email' not in session:
+        return redirect(url_for('apresentacao'))
+        
+    return render_template('contato.html')
 
-def saudacao (nome):
-    return f'Olá, {nome}!'
+@AppFinsys.route('/logout')
+def logout():
+    session.pop('user_email', None)
+    return redirect(url_for('apresentacao'))
 
-if __name__ == "__main__" :
-    AppFinsys.run(port = 8000)
+if __name__ == '__main__':
+    if not os.path.exists(JSON_FILE):
+        salvar_usuarios([])
+        
+    AppFinsys.run(port=8000, debug=True)
