@@ -3,14 +3,11 @@ from flask import Flask, render_template
 AppFinsys = Flask (__name__, template_folder='templates')
 
 @AppFinsys.route("/")
-def home():
-    return render_template ('home.html')
-
 @AppFinsys.route("/index")
-def indice():
+def inicio():
     return render_template ('index.html')
 
-@AppFinsys.route("/usuario")
+@AppFinsys.route("/perfil")
 def dados_usuario():
     dados_usu = {"nome": "Jeshua", "profissao": "Desenvolvedor", "aplicativo":"Finsys"}
     return render_template ("usuario.html", dados = dados_usu)
