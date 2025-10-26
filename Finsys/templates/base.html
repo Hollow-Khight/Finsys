@@ -1,21 +1,32 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block titulo %}Base para as páginas do Aplicativo{% endblock %}</title>
-</head>
+    <title>{% block titulo %}Finsys App{% endblock %}</title>
+    </head>
 <body>
-    <nav>
-        <a href="/">Início</a> |
-        <a href="/perfil">Perfil</a> |
-        <a href="/contato">Contato</a>
-    </nav>
-    {% block conteudo%}
-    {% endblock %}
-    
+    <header>
+        <h1>Finsys</h1>
+        <nav> 
+            {% if 'user_email' not in session %}
+                <a href="{{ url_for('apresentacao') }}">Apresentação</a> |
+                <a href="{{ url_for('login') }}">Login</a> |
+                <a href="{{ url_for('cadastro') }}">Cadastro</a>
+            {% else %}
+                <a href="{{ url_for('index') }}">Início</a> |
+                <a href="{{ url_for('dados_usuario') }}">Perfil</a> |
+                <a href="{{ url_for('contato') }}">Contato</a> |
+                <a href="{{ url_for('logout') }}">Sair</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        {% block conteudo %}{% endblock %}
+    </main>
+
     <footer>
-        <p>&copy;Aplicativo desenvolvido por Jeshua Hung</p>
+        <p>Desenvolvido com Flask.</p>
     </footer>
 </body>
 </html>

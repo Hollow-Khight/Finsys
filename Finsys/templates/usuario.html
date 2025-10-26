@@ -1,12 +1,27 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
-{% block titulo %}Perfil{% endblock %}
+{% block titulo %}Perfil do Usuário{% endblock %}
 
 {% block conteudo %}
-    <h2>Olá, {{dados['nome']}}</h2>
+    <h2>Informações do Usuário</h2> 
+    
+    {% if user %}
+    <h3>Olá, {{ user.nome_completo | default('Usuário') }}!</h3>
     <p>
-        <b>Profissão: </b> {{dados['profissao']}} <br>
-        <b>Aplicativo Desenvolvido: </b> {{dados['aplicativo']}}
+        <b>E-mail:</b> {{ user.email }} <br>
+        
+        </p>
+    
+    <hr>
+    
+    <p>
+        <b>Profissão (Simulação):</b> Desenvolvedor <br>
+        <b>Aplicativo Desenvolvido:</b> Finsys
     </p>
-
+    
+    {% else %}
+        <p>Dados do usuário não puderam ser carregados. Por favor, <a href="{{ url_for('logout') }}">faça login</a> novamente.</p>
+    {% endif %}
+    
+    <p><a href="{{ url_for('logout') }}">Sair do Sistema</a></p>
 {% endblock %}
