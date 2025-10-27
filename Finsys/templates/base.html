@@ -3,30 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block titulo %}Finsys App{% endblock %}</title>
-    </head>
-<body>
-    <header>
-        <h1>Finsys</h1>
-        <nav> 
-            {% if 'user_email' not in session %}
-                <a href="{{ url_for('apresentacao') }}">Apresentação</a> |
-                <a href="{{ url_for('login') }}">Login</a> |
-                <a href="{{ url_for('cadastro') }}">Cadastro</a>
-            {% else %}
-                <a href="{{ url_for('index') }}">Início</a> |
-                <a href="{{ url_for('dados_usuario') }}">Perfil</a> |
-                <a href="{{ url_for('contato') }}">Contato</a> |
-                <a href="{{ url_for('logout') }}">Sair</a>
-            {% endif %}
-        </nav>
-    </header>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+</head>
+<body class="{% if g.endpoint == 'apresentacao' and not g.user %}background-apresentacao{% endif %}">
 
-    <main>
+    {% block custom_header %}
+        {% if g.endpoint == 'apresentacao' and not g.user %}
+            <header class="header-apresentacao">
+                <div class="logo-placeholder"></div>
+                <h1>Finsys</h1>
+                <nav class="nav-apresentacao"> 
+                    <a href="{{ url_for('login') }}" class="btn-login-apresentacao">Login</a> 
+                    <a href="{{ url_for('cadastro') }}" class="btn-cadastro-apresentacao">Cadastre-se</a>
+                </nav>
+            </header>
+        {% else %}
+            <header>
+                <div class="logo-placeholder"></div>
+                <h1>Finsys</h1>
+                <nav> 
+                    {% if 'user_email' not in session %}
+                        <a href="{{ url_for('apresentacao') }}">Apresentação</a> |
+                        <a href="{{ url_for('login') }}">Login</a> |
+                        <a href="{{ url_for('cadastro') }}">Cadastro</a>
+                    {% else %}
+                        <a href="{{ url_for('index') }}">Início</a> |
+                        <a href="{{ url_for('dados_usuario') }}">Perfil</a> |
+                        <a href="{{ url_for('contato') }}">Contato</a> |
+                        <a href="{{ url_for('logout') }}">Sair</a>
+                    {% endif %}
+                </nav>
+            </header>
+        {% endif %}
+    {% endblock %}
+
+    <main class="{% if g.endpoint == 'apresentacao' and not g.user %}main-apresentacao{% endif %}">
         {% block conteudo %}{% endblock %}
     </main>
 
-    <footer>
-        <p>Desenvolvido com Flask.</p>
-    </footer>
+    {% block custom_footer %}
+        {% if g.endpoint == 'apresentacao' and not g.user %}
+            <footer class="footer-apresentacao">
+                <p>Desenvolvido por Jeshua</p>
+            </footer>
+        {% else %}
+            <footer>
+                <p>Desenvolvido com Flask. | <a href="{{ url_for('contato') }}">Desenvolvedor</a></p>
+            </footer>
+        {% endif %}
+    {% endblock %}
+    
+    <script src="{{ url_for('static', filename='JavaScript/script.js') }}"></script>
 </body>
 </html>

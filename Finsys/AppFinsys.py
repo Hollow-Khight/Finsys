@@ -37,6 +37,9 @@ def load_logged_in_user():
 
         if g.user is None:
             session.pop('user_email', None)
+    
+    # NOVO: Injeta o nome da rota atual (endpoint) para uso no template
+    g.endpoint = request.endpoint
 
 @AppFinsys.route('/')
 def apresentacao():
