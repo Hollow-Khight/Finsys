@@ -18,7 +18,7 @@ def carregar_usuarios():
         return []
 
 def salvar_usuarios(users_list):
-    """Salva a lista de usuários no arquivo JSON."""
+    
     try:
         with open(JSON_FILE, 'w') as f:
             json.dump(users_list, f, indent=4)
@@ -26,35 +26,35 @@ def salvar_usuarios(users_list):
     except IOError:
         return False
 
-@AppFinsys.antes_request
-def antes_request():
+
+@AppFinsys.before_request
+def load_logged_in_user():
     g.user = None
     if 'user_email' in session:
         users = carregar_usuarios()
-        # Armazena o objeto do usuário em 'g.user' para fácil acesso
+        
         g.user = next((user for user in users if user['email'] == session['user_email']), None)
-        # Se o email na sessão não for mais válido, limpa a sessão
+
         if g.user is None:
             session.pop('user_email', None)
 
 @AppFinsys.route('/')
 def apresentacao():
-    if 'user_email' in session:
+    if g.user:
         return redirect(url_for('index'))
     else:
         return render_template('apresentacao.html')
 
 @AppFinsys.route('/index')
 def index():
-    if 'user_email' not in session:
+    if not g.user:
         return redirect(url_for('apresentacao'))
     
     return render_template('index.html')
 
-
 @AppFinsys.route('/login', methods=['GET', 'POST'])
 def login():
-    if 'user_email' in session:
+    if g.user:
         return redirect(url_for('index'))
         
     if request.method == 'POST':
@@ -74,7 +74,7 @@ def login():
 
 @AppFinsys.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
-    if 'user_email' in session:
+    if g.user:
         return redirect(url_for('index'))
 
     if request.method == 'POST':
@@ -112,14 +112,14 @@ def cadastro():
 
 @AppFinsys.route('/perfil')
 def dados_usuario():
-    if 'user_email' not in session:
+    if not g.user:
         return redirect(url_for('apresentacao')) 
 
     return render_template('usuario.html', user=g.user)
 
 @AppFinsys.route('/contato')
 def contato():
-    if 'user_email' not in session:
+    if not g.user:
         return redirect(url_for('apresentacao'))
         
     return render_template('contato.html')
@@ -128,6 +128,7 @@ def contato():
 def logout():
     session.pop('user_email', None)
     return redirect(url_for('apresentacao'))
+
 
 if __name__ == '__main__':
     if not os.path.exists(JSON_FILE):
