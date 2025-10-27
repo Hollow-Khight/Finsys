@@ -1,39 +1,59 @@
-# 🧾 Projeto Flask - Sistema de Cadastro e Login com Validação de Usuários
+# 🧾 Projeto Finsys - Sistema de Gestão Financeira Pessoal (MVP)
 
-Este projeto foi desenvolvido utilizando **Flask**, um microframework Python para criação de aplicações web.  
-O objetivo de hoje foi implementar **validação de usuários**, com **telas de cadastro, login e perfil**, utilizando um **arquivo JSON** para armazenamento dos dados.
+Este projeto foi desenvolvido utilizando **Flask**, um microframework Python, como um **Mínimo Produto Viável (MVP)** para um sistema de organização e gestão financeira pessoal.  
+O foco é a **usabilidade** e **segurança básica na entrada de dados**.
 
 ---
 
-## 🚀 Funcionalidades Principais
+## 🚀 Funcionalidades e Implementações
 
-✅ Cadastro de novos usuários  
-✅ Validação de e-mail duplicado  
-✅ Login com verificação de e-mail e senha  
-✅ Armazenamento seguro da sessão do usuário  
-✅ Exibição dos dados do usuário logado  
-✅ Bloqueio de acesso a páginas sem login  
-✅ Logout do usuário
+O projeto implementa **validação de usuários** e inclui telas de **cadastro**, **login** e **perfil**.
+
+### 🖥️ Backend & Segurança
+- ✅ Cadastro de novos usuários  
+- ✅ **Armazenamento de dados no arquivo JSON** (`users.json`)  
+- ✅ **Implementação de filtros Jinja2** para formatação de CPF e Telefone na visualização de perfil (ex: `707.333.444-55`)  
+- ✅ Login com verificação de e-mail e senha  
+- ✅ Bloqueio de acesso a páginas sem login  
+- ✅ Armazenamento seguro da sessão do usuário com `SECRET_KEY`  
+- ✅ Logout do usuário  
+
+### 🎨 Frontend & Usabilidade
+- ✅ **Design customizado** com paleta de cores laranja/branco (inspirado no Banco Inter)  
+- ✅ **Validação de e-mail duplicado** no momento do cadastro  
+- ✅ **Validação de senha robusta** (mínimo de 6 caracteres, 1 maiúscula, 1 número, 1 caractere especial)  
+- ✅ **Máscaras automáticas** via JavaScript para CPF e Telefone (melhorando a entrada de dados)  
+- ✅ Exibição dos dados do usuário logado na página de perfil  
+- ✅ Página de contato com dados do desenvolvedor e foto de perfil  
 
 ---
 
 ## 🧠 Estrutura do Projeto
 
 ```
-📁 seu_projeto/
+📁 Finsys/
 │
-├── templates/              # Páginas HTML do sistema
+├── static/
+│   ├── CSS/
+│   │   └── style.css               # Estilos globais e de layout
+│   ├── Imagens/
+│   │   ├── logo_finsys.png         # Logotipo do aplicativo
+│   │   └── perfil_desenvolvedor.jpg # Foto de perfil do dev (página Contato)
+│   └── JavaScript/
+│       └── script.js               # Lógica de máscaras (CPF, Telefone) e validação
+│
+├── templates/                      # Páginas HTML do sistema
 │   ├── apresentacao.html
-│   ├──base.html
+│   ├── base.html
 │   ├── cadastro.html
 │   ├── contato.html
 │   ├── index.html
 │   ├── login.html
 │   └── usuario.html
 │
-├── AppFinsys.py                  # Código principal do Flask (arquivo que você executa)
-│
-└── README.md               # Este arquivo
+├── AppFinsys.py                    # Código principal do Flask (arquivo que você executa)
+├── users.json                      # Arquivo de armazenamento dos usuários
+└── README.md                       # Este arquivo
 ```
 
 ---
@@ -42,64 +62,47 @@ O objetivo de hoje foi implementar **validação de usuários**, com **telas de 
 
 - **Python 3**
 - **Flask**
+- **Jinja2** (templating)
 - **HTML5**
-- **JSON**
-- (Opcional) **CSS / Bootstrap** para estilização
+- **JSON** (banco de dados simulado)
+- **CSS3** (estilização customizada)
+- **JavaScript** (máscaras e validações)
 
 ---
 
 ## 🧩 Como Executar o Projeto
 
-1. **Clone o repositório**
-   ```bash
-   git clone https://github.com/Hollow-Khight/Finsys.git
-   cd Finsys
-   ```
+### 1️⃣ Clone o repositório
+```bash
+git clone https://github.com/Hollow-Khight/Finsys.git
+cd Finsys
+```
 
-2. **Crie um ambiente virtual**
-   ```bash
-   python -m venv Finsys
+### 2️⃣ Crie e ative um ambiente virtual
+```bash
+python -m venv venv
+# Linux/Mac:
+source venv/bin/activate
+# Windows:
+venv\Scripts\activate
+```
 
-3. **Ative o ambiente**
-   ```bash
-   source venv/bin/activate     # Linux/Mac
-   Finsys\Scripts\activate      # Windows
-   ```
+### 3️⃣ Instale as dependências
+```bash
+pip install flask
+```
 
-4. **Instale as dependências**
-   ```bash
-   pip install flask
-   ```
+### 4️⃣ Execute o servidor Flask
+```bash
+python AppFinsys.py
+```
 
-5. **Execute o servidor Flask**
-   ```bash
-   python AppFinsys.py
-   ```
-
-6. **Acesse no navegador:**
-   ```
-   http://127.0.0.1:8000
-   ```
-
----
-
-## 🔒 Segurança e Sessões
-
-- O sistema utiliza uma **chave secreta (SECRET_KEY)** para proteger as sessões.  
-- As rotas protegidas exigem que o usuário esteja logado. 
-- O arquivo `users.json` é criado automaticamente quando é cadastrada uma pessoa.
-- O login é validado com base no arquivo `users.json`, que guarda os dados cadastrados.
+### 5️⃣ Acesse no navegador
+```
+http://127.0.0.1:5000
+```
 
 ---
 
-## 👤 Autor
-
-**Jeshua Daniel**  
-Projeto criado para estudo e prática com Flask.  
-Dia 26/10/2025: Implementação de cadastro, login, validação e controle de sessão de usuários.
-
----
-
-## 📄 Licença
-
-Este projeto é de uso livre para fins educacionais e acadêmicos.
+💡 **Dica:**  
+Você pode editar as páginas HTML e os arquivos CSS/JS livremente na pasta `static/` e `templates/` para personalizar o design do sistema conforme desejar.
