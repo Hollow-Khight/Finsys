@@ -10,8 +10,11 @@
     {% block custom_header %}
         {% if g.endpoint == 'apresentacao' and not g.user %}
             <header class="header-apresentacao">
-                <div class="logo-placeholder"></div>
-                <h1>Finsys</h1>
+                <div class="logo-container">
+                    <img src="{{ url_for('static', filename='Imagens/Logotipo.png') }}" alt="Logo Finsys" class="logo-app logo-apresentacao">
+                    <h1>Finsys</h1>
+                </div>
+                
                 <nav class="nav-apresentacao"> 
                     <a href="{{ url_for('login') }}" class="btn-login-apresentacao">Login</a> 
                     <a href="{{ url_for('cadastro') }}" class="btn-cadastro-apresentacao">Cadastre-se</a>
@@ -19,8 +22,11 @@
             </header>
         {% else %}
             <header>
-                <div class="logo-placeholder"></div>
-                <h1>Finsys</h1>
+                <div class="logo-container">
+                    <img src="{{ url_for('static', filename='Imagens/Logotipo.png') }}" alt="Logo Finsys" class="logo-app">
+                    <h1>Finsys</h1>
+                </div>
+                
                 <nav> 
                     {% if 'user_email' not in session %}
                         <a href="{{ url_for('apresentacao') }}">Apresentação</a> |
@@ -29,8 +35,7 @@
                     {% else %}
                         <a href="{{ url_for('index') }}">Início</a> |
                         <a href="{{ url_for('dados_usuario') }}">Perfil</a> |
-                        <a href="{{ url_for('contato') }}">Contato</a> |
-                        <a href="{{ url_for('logout') }}">Sair</a>
+                        <a href="{{ url_for('contato') }}">Contato</a>
                     {% endif %}
                 </nav>
             </header>
@@ -48,7 +53,7 @@
             </footer>
         {% else %}
             <footer>
-                <p>Desenvolvido com Flask. | <a href="{{ url_for('contato') }}">Desenvolvedor</a></p>
+                <p>&copy;Desenvolvido por Jeshua</a></p>
             </footer>
         {% endif %}
     {% endblock %}

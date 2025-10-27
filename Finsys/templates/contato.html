@@ -3,8 +3,17 @@
 {% block titulo %}Contato{% endblock %}
 
 {% block conteudo %}
-    <h1>Meus dados</h1>
-    <p>Nome Completo: Jeshua Daniel Hung Centeno</p>
-    <p>Telefone: (69) 99219-6204</p>
-    <p>Pix para doações: jeshuahung936@gmail.com</p>
+    <div class="contato-desenvolvedor">
+        <h1>Dados do Desenvolvedor</h1>
+        
+        <img src="{{ url_for('static', filename='Imagens/gato.png') }}" 
+             alt="Foto de Perfil do Desenvolvedor" 
+             class="foto-perfil-contato">
+        
+        <div class="dados-desenvolvedor">
+            <p><strong>Nome Completo:</strong> Jeshua Daniel Hung Centeno</p>
+            <p><strong>Telefone:</strong> (69) 99219-6204</p>
+            <p><strong>Pix para doações:</strong> jeshuahung936@gmail.com</p>
+        </div>
+    </div>
 {% endblock %}

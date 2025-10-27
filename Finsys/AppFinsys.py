@@ -7,6 +7,30 @@ SECRET_KEY = os.environ.get('SECRET_KEY') or 'sua_chave_secreta_e_unica'
 AppFinsys = Flask(__name__, template_folder='templates')
 AppFinsys.secret_key = SECRET_KEY
 
+def format_cpf(value):
+    """Formata CPF para xxx.xxx.xxx-xx."""
+    if not value:
+        return ""
+    cpf = str(value).replace('.', '').replace('-', '')
+    if len(cpf) == 11:
+        return f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
+    return str(value)
+
+def format_phone(value):
+    """Formata telefone para (xx) xxxxx-xxxx ou (xx) xxxx-xxxx."""
+    if not value:
+        return ""
+    phone = str(value).replace('(', '').replace(')', '').replace(' ', '').replace('-', '')
+    
+    if len(phone) == 11: # (XX) XXXXX-XXXX
+        return f"({phone[:2]}) {phone[2:7]}-{phone[7:]}"
+    elif len(phone) == 10: # (XX) XXXX-XXXX
+        return f"({phone[:2]}) {phone[2:6]}-{phone[6:]}"
+    return str(value)
+
+AppFinsys.jinja_env.filters['format_cpf'] = format_cpf
+AppFinsys.jinja_env.filters['format_phone'] = format_phone
+
 def carregar_usuarios():
     if not os.path.exists(JSON_FILE):
         return []
@@ -38,7 +62,7 @@ def load_logged_in_user():
         if g.user is None:
             session.pop('user_email', None)
     
-    # NOVO: Injeta o nome da rota atual (endpoint) para uso no template
+    
     g.endpoint = request.endpoint
 
 @AppFinsys.route('/')
